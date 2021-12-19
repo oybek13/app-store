@@ -1,7 +1,6 @@
 package uz.team.entity.template;
 
 import lombok.Data;
-import uz.team.entity.Category;
 
 import javax.persistence.*;
 
@@ -15,9 +14,6 @@ public abstract class AbsEntity {
 
     private String name;
 
-    @ManyToOne
-    private Category parentCategory;
-
-    private boolean active;
+    private boolean active=true;
 
 }

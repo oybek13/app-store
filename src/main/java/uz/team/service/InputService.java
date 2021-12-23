@@ -31,23 +31,23 @@ public class InputService {
     WarehouseRepository warehouseRepository;
 
     public ResultDto addService(InputDto inputDto) {
-        Input input = new Input();
 
         Optional<Warehouse> optionalWarehouse = warehouseRepository.findById(inputDto.getWarehouseId());
-        if (!optionalWarehouse.isPresent())
+        if (!optionalWarehouse.isPresent()) {
             return new ResultDto("Sorry warehouse is not found!", false);
-
+        }
 
         Optional<Supplier> optionalSupplier = supplierRepository.findById(inputDto.getSupplierId());
-        if (!optionalSupplier.isPresent())
+        if (!optionalSupplier.isPresent()) {
             return new ResultDto("Sorry Supplier is not found!", false);
-
+        }
 
         Optional<Currency> optionalCurrency = currencyRepository.findById(inputDto.getCurrencyId());
-        if (!optionalCurrency.isPresent())
+        if (!optionalCurrency.isPresent()) {
             return new ResultDto("Sorry Currency is not found!", false);
+        }
 
-
+        Input input = new Input();
         input.setDate(inputDto.getDate());
         input.setWarehouse(optionalWarehouse.get());
         input.setSupplier(optionalSupplier.get());
@@ -100,7 +100,7 @@ public class InputService {
             return new ResultDto("Input successfully updated!", true);
 
         }
-        return new ResultDto("Ooops, not updated!", false);
+        return new ResultDto("Ups, not updated!", false);
     }
 
     public ResultDto deleteService(Integer id){

@@ -34,6 +34,13 @@ public class User {
 
     private boolean active = true;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.DETACH,
+            CascadeType.MERGE, CascadeType.REFRESH })
+    @JoinTable(
+            name = "users_warehouses",
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "warehouses_id")
+    )
     private Set<Warehouse> warehouses;
 }

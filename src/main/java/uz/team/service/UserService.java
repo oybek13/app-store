@@ -40,7 +40,40 @@ public class UserService {
         return new ResultDto("Successfully added!", true);
     }
 
+    public List<User> getAll(){
+        return userRepository.findAll();
+    }
 
+    public ResultDto updateUser(Integer id, UserDto userDto){
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (!optionalUser.isPresent()){
+            return new ResultDto("Sorry this user not found", false);
+        }
 
+        User editingUser = optionalUser.get();
+        editingUser.setFirstName(userDto.getFirstName());
+        editingUser.setLastName(userDto.getLastName());
+        editingUser.setPassword(userDto.getPassword());
+        editingUser.setPhoneNumber(userDto.getPhoneNumber());
+        editingUser.setCode(userDto.getCode());
+
+        Set<Warehouse> w = new HashSet<>();
+        for (Integer i : userDto.getWarehouseIds()) {
+            Optional<Warehouse> optionalWarehouse = warehouseRepository.findById(i);
+            if (!optionalWarehouse.isPresent()) {
+                return new ResultDto("Sorry this warehouse not found", false);
+            }
+            Warehouse warehouse = optionalWarehouse.get();
+            w.add(warehouse);
+        }
+        editingUser.setWarehouses(w);
+        userRepository.save(editingUser);
+        return new ResultDto("User successfully updated!", true);
+    }
+
+    public User getOneUser(Integer id){
+        Optional<User> byId = userRepository.findById(id);
+        return byId.orElse(null);
+    }
 
 }

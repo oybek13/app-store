@@ -9,7 +9,7 @@ import uz.team.dto.UserDto;
 import uz.team.entity.User;
 import uz.team.entity.Warehouse;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -19,21 +19,28 @@ public class UserService {
     @Autowired
     WarehouseRepository warehouseRepository;
 
-    public ResultDto add(UserDto userDto){
+    public ResultDto addUser(UserDto userDto){
         User user = new User();
         user.setCode(userDto.getCode());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setPassword(userDto.getPassword());
         user.setPhoneNumber(userDto.getPhoneNumber());
-
-        Optional<Warehouse> optionalWarehouse = warehouseRepository.findById(userDto.getWarehouseId());
-        if (!optionalWarehouse.isPresent()){
-            return new ResultDto("Sorry this warehouse doesn't exist!", false);
+        Set<Warehouse> w = new HashSet<>();
+        for(Integer i: userDto.getWarehouseIds()){
+            Optional<Warehouse> optionalWarehouse = warehouseRepository.findById(i);
+            if (!optionalWarehouse.isPresent()){
+                return new ResultDto("Sorry this warehouse doesn't exist!", false);
+            }
+            Warehouse warehouse = optionalWarehouse.get();
+            w.add(warehouse);
         }
-        Warehouse warehouse = optionalWarehouse.get();
-
-        return null;
+        user.setWarehouses(w);
+        userRepository.save(user);
+        return new ResultDto("Successfully added!", true);
     }
+
+
+
 
 }

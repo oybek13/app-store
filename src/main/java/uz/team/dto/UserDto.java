@@ -2,6 +2,8 @@ package uz.team.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class UserDto {
 
@@ -10,5 +12,5 @@ public class UserDto {
     private String phoneNumber;
     private String code;
     private String password;
-    private Integer warehouseId;
+    private List<Integer> warehouseIds;
 }
